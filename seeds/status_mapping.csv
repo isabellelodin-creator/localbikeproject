@@ -1,0 +1,5 @@
+status_code,status_label,is_completed,is_cancelled
+1,pending,false,false
+2,processing,false,false
+3,cancelled,false,true
+4,completed,true,false

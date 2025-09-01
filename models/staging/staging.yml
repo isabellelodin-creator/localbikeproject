@@ -1,0 +1,141 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Customers staging model"
+    columns:
+      - name: customer_id
+        description: "Unique identifier of the customer"
+        tests:
+          - not_null
+          - unique
+      - name: email
+        description: "Customer email address"
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: "Orders staging model"
+    columns:
+      - name: order_id
+        description: "Unique identifier of the order"
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: "Foreign Key to customers"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: store_id
+        description: "Foreign Key to stores"
+        tests:
+          - relationships:
+              to: ref('stg_stores')
+              field: store_id
+      - name: staff_id
+        description: "Foreign Key to staffs"
+        tests:
+          - relationships:
+              to: ref('stg_staffs')
+              field: staff_id
+
+  - name: stg_order_items
+    description: "Order items staging model"
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_orders')
+              field: order_id
+      - name: item_id
+        tests:
+          - not_null
+      - name: product_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_products')
+              field: product_id
+
+  - name: stg_products
+    description: "Products staging model"
+    columns:
+      - name: product_id
+        tests:
+          - not_null
+          - unique
+      - name: brand_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_brands')
+              field: brand_id
+      - name: category_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_categories')
+              field: category_id
+
+  - name: stg_brands
+    description: "Brands staging model"
+    columns:
+      - name: brand_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_categories
+    description: "Categories staging model"
+    columns:
+      - name: category_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_stores
+    description: "Stores staging model"
+    columns:
+      - name: store_id
+        tests:
+          - not_null
+          - unique
+
+  - name: stg_staffs
+    description: "Staff staging model"
+    columns:
+      - name: staff_id
+        tests:
+          - not_null
+          - unique
+      - name: manager_id
+        tests:
+          - relationships:
+              to: ref('stg_staffs')
+              field: staff_id
+      - name: store_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_stores')
+              field: store_id
+
+  - name: stg_stocks
+    description: "Stocks staging model"
+    columns:
+      - name: product_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_products')
+              field: product_id
+      - name: store_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_stores')
+              field: store_id

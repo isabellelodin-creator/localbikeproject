@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: localbike_src          # nom logique de ton "package source"
+    schema: localbike            # dataset BigQuery où tu as importé les 9 fichiers
+    tables:
+      - name: customers
+      - name: orders
+      - name: order_items
+      - name: products
+      - name: categories
+      - name: brands
+      - name: stocks
+      - name: stores
+      - name: staffs

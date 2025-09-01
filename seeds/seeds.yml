@@ -1,0 +1,9 @@
+version: 2
+seeds:
+  - name: status_mapping
+    description: "Mapping des codes statut de commande vers des libellés/flags"
+    columns:
+      - name: status_code
+        tests: [not_null, unique]
+      - name: status_label
+        tests: [not_null]

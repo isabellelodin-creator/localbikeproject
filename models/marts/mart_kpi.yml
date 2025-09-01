@@ -1,0 +1,22 @@
+version: 2
+models:
+  - name: fct_kpi_daily
+    columns:
+      - name: order_day
+        tests: [not_null, unique]
+      - name: revenue_net
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: orders_count
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: aov_value
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: aov_items
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"

@@ -1,0 +1,90 @@
+version: 2
+
+models:
+  - name: dim_product
+    description: "Dimension produit avec marque et catégorie"
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+      - name: product_name
+        tests: [not_null]
+      - name: brand_id
+        tests:
+          - relationships: {to: ref('stg_brands'), field: brand_id}
+      - name: category_id
+        tests:
+          - relationships: {to: ref('stg_categories'), field: category_id}
+
+  - name: dim_customer
+    description: "Dimension client enrichie (agrégats commande)"
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: email
+        tests: [not_null]
+      - name: total_revenue_net
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+
+  - name: dim_store
+    description: "Dimension magasin"
+    columns:
+      - name: store_id
+        tests: [not_null, unique]
+      - name: store_name
+        tests: [not_null]
+
+  - name: dim_date
+    description: "Dimension date (dérivée de int_calendar)"
+    columns:
+      - name: date
+        tests: [not_null, unique]
+
+  - name: fct_sales_daily
+    description: "Fait ventes journalier (date x store x product)"
+    columns:
+      - name: order_day
+        tests: [not_null]
+      - name: store_id
+        tests:
+          - not_null
+          - relationships: {to: ref('dim_store'), field: store_id}
+      - name: product_id
+        tests:
+          - not_null
+          - relationships: {to: ref('dim_product'), field: product_id}
+      - name: revenue_net
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+      - name: units_sold
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+
+  - name: fct_sales_by_store
+    description: "Fait ventes journalier agrégé par magasin"
+    columns:
+      - name: order_day
+        tests: [not_null]
+      - name: store_id
+        tests:
+          - not_null
+          - relationships: {to: ref('dim_store'), field: store_id}
+      - name: revenue_net
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
+
+  - name: fct_customer_lifetime
+    description: "Indicateurs cumulés par client"
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships: {to: ref('dim_customer'), field: customer_id}
+      - name: total_revenue_net
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: ">= 0"
