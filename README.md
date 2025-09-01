@@ -1,5 +1,6 @@
 Welcome to your new dbt project!
 
+<!--test peer review -->
 ### Using the starter project
 
 Try running the following commands:
