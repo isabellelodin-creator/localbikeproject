@@ -1,10 +1,10 @@
 with sales as (
-  select order_day, sum(revenue_net) as revenue_net, sum(units_sold) as units_sold
+  select cast(order_day as date) as order_day, sum(revenue_net) as revenue_net, sum(units_sold) as units_sold
   from {{ ref('fct_sales_daily') }}
   group by 1
 ),
 orders as (
-  select order_timestamp as order_day, count(distinct order_id) as orders_count
+  select cast(order_timestamp as date) as order_day, count(distinct order_id) as orders_count
   from {{ ref('int_orders_enriched') }}
   where is_completed = true
   group by 1

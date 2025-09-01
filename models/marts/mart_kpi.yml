@@ -12,11 +12,11 @@ models:
         tests:
           - dbt_utils.expression_is_true:
               expression: ">= 0"
-      - name: aov_value
+      - name: aov_daily
         tests:
           - dbt_utils.expression_is_true:
               expression: ">= 0"
-      - name: aov_items
+      - name: aov_global
         tests:
           - dbt_utils.expression_is_true:
               expression: ">= 0"
